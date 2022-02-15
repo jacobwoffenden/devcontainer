@@ -1,0 +1,19 @@
+ARG CONTAINER_BASE_IMAGE
+FROM ${CONTAINER_BASE_IMAGE}
+
+ARG CONTAINER_USERNAME \
+    TOOL_VERSION_VSCODE_DEVCONTAINERS
+
+COPY devcontainer/src/root /root/
+
+RUN bash /root/build.sh
+
+USER ${USERNAME}
+
+VOLUME [ "/home/${CONTAINER_USERNAME}/workspace" ]
+VOLUME [ "/home/${CONTAINER_USERNAME}/.commandhistory" ]
+VOLUME [ "/home/${CONTAINER_USERNAME}/.docker" ]
+VOLUME [ "/var/lib/docker" ]
+
+ENTRYPOINT [ "/usr/local/share/docker-init.sh", "/usr/local/share/ssh-init.sh" ]
+CMD [ "/usr/bin/sleep", "infinity" ]
