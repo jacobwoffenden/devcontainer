@@ -1,14 +1,12 @@
-ARG CONTAINER_BASE_IMAGE
-FROM ${CONTAINER_BASE_IMAGE}
+FROM public.ecr.aws/ubuntu/ubuntu:20.04_stable
 
-ARG CONTAINER_USERNAME \
-    TOOL_VERSION_VSCODE_DEVCONTAINERS
+ARG CONTAINER_USERNAME
 
 COPY devcontainer/src/root /root/
 
 RUN bash /root/build.sh
 
-USER ${USERNAME}
+USER ${CONTAINER_USERNAME}
 
 VOLUME [ "/home/${CONTAINER_USERNAME}/workspace" ]
 VOLUME [ "/home/${CONTAINER_USERNAME}/.commandhistory" ]

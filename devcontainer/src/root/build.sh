@@ -13,7 +13,7 @@ USERNAME="${CONTAINER_USERNAME}"
 USER_UID="1000"
 USER_GID="1000"
 
-VSCODE_DEVCONTAINERS_VERSION="${TOOL_VERSION_VSCODE_DEVCONTAINERS}"
+VSCODE_DEVCONTAINERS_VERSION="v0.222.0" # https://github.com/microsoft/vscode-dev-containers/releases
 
 ####################
 # Functions
@@ -25,9 +25,7 @@ initialiseApt() {
     apt-transport-https \
     bash \
     ca-certificates \
-    curl
-  
-  apt install --assume-yes \
+    curl \
     icu-devtools
 }
 
