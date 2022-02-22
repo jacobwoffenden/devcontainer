@@ -69,6 +69,7 @@ install_apt_packages() {
     icu-devtools \
     python3 \
     python3-pip \
+    sshpass \
     unzip \
     zip
 }

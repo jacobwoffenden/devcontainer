@@ -90,7 +90,7 @@ fi
 
 case ${SCRIPT_MODE} in
   install | update )
-    # remove_container
+    remove_container
     build_container
     launch_container
   ;;
