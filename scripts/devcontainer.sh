@@ -57,6 +57,12 @@ launch_container() {
     --volume ${CONTAINER_NAME}-workspace:/home/${CONTAINER_USERNAME}/workspace \
     --volume ${CONTAINER_NAME}-commandhistory:/home/${CONTAINER_USERNAME}/.commandhistory \
     --volume ${CONTAINER_NAME}-dockerconfig:/home/${CONTAINER_USERNAME}/.docker \
+    --volume ${CONTAINER_NAME}-github:/home/${CONTAINER_USERNAME}/.config/gh \
+    --volume ${CONTAINER_NAME}-aws:/home/${CONTAINER_USERNAME}/.aws \
+    --volume ${CONTAINER_NAME}-awsvault:/home/${CONTAINER_USERNAME}/.awsvault \
+    --volume ${CONTAINER_NAME}-kube:/home/${CONTAINER_USERNAME}/.kube \
+    --volume ${CONTAINER_NAME}-gcloud:/home/${CONTAINER_USERNAME}/.config/gcloud \
+    --volume ${CONTAINER_NAME}-configstore:/home/${CONTAINER_USERNAME}/.config/configstore \
     --volume ${CONTAINER_NAME}-docker:/var/lib/docker \
     ${CONTAINER_IMAGE_NAME} )
 

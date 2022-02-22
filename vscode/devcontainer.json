@@ -7,6 +7,7 @@
     "redhat.vscode-yaml",
     "redhat.ansible",
     "HashiCorp.terraform",
-    "AquaSecurityOfficial.trivy-vulnerability-scanner"
+    "AquaSecurityOfficial.trivy-vulnerability-scanner",
+    "snyk-security.snyk-vulnerability-scanner"
   ]
 }

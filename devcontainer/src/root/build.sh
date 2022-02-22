@@ -17,8 +17,11 @@ USER_GID="1000"
 VSCODE_DEVCONTAINERS_VERSION="v0.222.0" # https://github.com/microsoft/vscode-dev-containers/releases
 
 # Binaries
+AWSCLI_VERSION="2.4.19" # https://github.com/aws/aws-cli/blob/v2/CHANGELOG.rst
+AWSVAULT_VERSION="6.5.0" # https://github.com/99designs/aws-vault/releases
 COSIGN_VERSION="1.5.2" # https://github.com/sigstore/cosign/releases
 GITHUB_CLI_VERSION="2.5.1" # https://github.com/cli/cli/releases
+GCLOUD_VERSION="373.0.0" # https://cloud.google.com/sdk/docs/release-notes
 GRYPE_VERSION="0.33.0" # https://github.com/anchore/grype/releases
 HELM_VERSION="3.8.0" # https://github.com/helm/helm/releases
 KUBECTL_VERSION="1.23.4" # https://storage.googleapis.com/kubernetes-release/release/stable.txt
@@ -26,11 +29,13 @@ KUBELINTER_VERSION="0.2.5" # https://github.com/stackrox/kube-linter/releases
 KUBESEC_VERSION="2.11.4" # https://github.com/controlplaneio/kubesec/releases
 OPA_VERSION="0.37.2" # https://github.com/open-policy-agent/opa/releases
 ORAS_VERSION="0.12.0" # https://github.com/oras-project/oras/releases
+SNYK_VERSION="1.856.0" # https://github.com/snyk/snyk/releases
 SYFT_VERSION="0.38.0" # https://github.com/anchore/syft/releases
 TERRAFORM_VERSION="1.1.6" # https://github.com/hashicorp/terraform/releases
 TERRAGRUNT_VERSION="0.36.1" # https://github.com/gruntwork-io/terragrunt/releases
 TFLINT_VERSION="0.34.1" # https://github.com/terraform-linters/tflint/releases
 TFSEC_VERSION="1.4.2" # https://github.com/aquasecurity/tfsec/releases
+TRIVY_VERSION="0.23.0" # https://github.com/aquasecurity/trivy/releases
 
 # Pip
 ARGCOMPLETE_VERSION="2.0.0" # https://pypi.org/project/argcomplete/#history
@@ -66,6 +71,7 @@ install_apt_packages() {
     ca-certificates \
     curl \
     git-crypt \
+    gnupg \
     icu-devtools \
     python3 \
     python3-pip \
@@ -109,6 +115,20 @@ setup_vscode_ssh() {
   bash /tmp/sshd-debian.sh "2222" "${USERNAME}" "false" "skip" "true"
 }
 
+install_awscli() {
+  curl https://awscli.amazonaws.com/awscli-exe-linux-${ARCH}-${AWSCLI_VERSION}.zip \
+    --output awscliv2.zip
+  unzip -q awscliv2.zip
+  bash aws/install
+  rm -rf aws awscliv2.zip
+}
+
+install_awsvault() {
+  curl --location https://github.com/99designs/aws-vault/releases/download/${AWSVAULT_VERSION}/aws-vault-linux-${ALT_ARCH} \
+    --output /usr/local/bin/aws-vault
+  chmod +x /usr/local/bin/aws-vault
+}
+
 install_cosign() {
   curl --location https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-${ALT_ARCH} \
     --output /usr/local/bin/cosign
@@ -123,6 +143,14 @@ install_github() {
   rm -rf gh_${GITHUB_CLI_VERSION}_linux_${ALT_ARCH}*
 
   gh completion -s zsh > /usr/local/share/zsh/site-functions/_gh
+}
+
+install_gcloud() {
+  echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+  apt update --yes
+  apt install --yes \
+    google-cloud-sdk="${GCLOUD_VERSION}-0" # '-0' is required as per https://cloud.google.com/sdk/docs/install#:~:text=To%20revert%20to,cloud%2Dsdk%3D123.0.0%2D0
 }
 
 install_grype() {
@@ -183,6 +211,12 @@ install_oras() {
   rm -f oras_${ORAS_VERSION}_linux_${ALT_ARCH}.tar.gz LICENSE
 }
 
+install_snyk() {
+  curl --location https://github.com/snyk/snyk/releases/download/v${SNYK_VERSION}/snyk-linux-${ALT_ARCH} \
+    --output /usr/local/bin/snyk
+  chmod +x /usr/local/bin/snyk
+}
+
 install_syft() {
   curl --location https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syft_${SYFT_VERSION}_linux_${ALT_ARCH}.tar.gz \
     --output syft_${SYFT_VERSION}_linux_${ALT_ARCH}.tar.gz
@@ -219,6 +253,14 @@ install_tfsec() {
   chmod +x /usr/local/bin/tfsec
 }
 
+install_trivy() {
+  curl --location https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-${ALT_ARCH^^}.tar.gz \
+    --output trivy_${TRIVY_VERSION}_Linux-${ALT_ARCH^^}.tar.gz
+  tar -zxvf trivy_${TRIVY_VERSION}_Linux-${ALT_ARCH^^}.tar.gz
+  mv trivy /usr/local/bin/trivy
+  rm -rf trivy_${TRIVY_VERSION}_Linux-${ALT_ARCH^^}.tar.gz README.md LICENSE contrib
+}
+
 configure_user_artefacts() {
   mv /root/src/zshrc /home/${USERNAME}/.zshrc
   chown --recursive ${USERNAME}:${USERNAME} /home/${USERNAME}/.zshrc
@@ -233,6 +275,28 @@ configure_filesystem() {
 
   mkdir --parents /home/${USERNAME}/.docker
   chown --recursive ${USERNAME}:${USERNAME} /home/${USERNAME}/.docker
+
+  mkdir --parents /home/${USERNAME}/.config/gh
+  chown --recursive ${USERNAME}:${USERNAME} /home/${USERNAME}/.config/gh
+
+  mkdir --parents /home/${USERNAME}/.aws
+  chown --recursive ${USERNAME}:${USERNAME} /home/${USERNAME}/.aws
+
+  mkdir --parents /home/${USERNAME}/.awsvault
+  chown --recursive ${USERNAME}:${USERNAME} /home/${USERNAME}/.awsvault
+
+  mkdir --parents /home/${USERNAME}/.kube
+  chown --recursive ${USERNAME}:${USERNAME} /home/${USERNAME}/.kube
+
+  # This is not an exported volume, but it needs to be created otherwise VSCode's terminal will throw an error about permissions
+  mkdir --parents /home/${USERNAME}/.config/vscode-dev-containers
+  chown --recursive ${USERNAME}:${USERNAME} /home/${USERNAME}/.config/vscode-dev-containers
+
+  mkdir --parents /home/${USERNAME}/.config/gcloud
+  chown --recursive ${USERNAME}:${USERNAME} /home/${USERNAME}/.config/gcloud
+
+  mkdir --parents /home/${USERNAME}/.config/configstore
+  chown --recursive ${USERNAME}:${USERNAME} /home/${USERNAME}/.config/configstore
 }
 
 clean_apt_cache() {
@@ -258,8 +322,11 @@ setup_vscode_ssh
 
 ###
 
+install_awscli
+install_awsvault
 install_cosign
 install_github
+install_gcloud
 install_grype
 install_helm
 install_kubectl
@@ -267,11 +334,13 @@ install_kubelinter
 install_kubesec
 install_opa
 install_oras
+install_snyk
 install_syft
 install_terraform
 install_terragrunt
 install_tflint
 install_tfsec
+install_trivy
 
 ####
 
