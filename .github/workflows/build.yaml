@@ -38,7 +38,7 @@ jobs:
           tags: |
             devcontainer:latest
           build-args: |
-            CONTAINER_USERNAME="devcontainer"
+            CONTAINER_USERNAME=devcontainer
 
       - name: Scan Container
         id: scan
