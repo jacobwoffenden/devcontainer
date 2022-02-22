@@ -7,15 +7,15 @@ set -o pipefail
 ####################
 # Variables
 ####################
-CONTAINER_IMAGE_NAME="jacobwoffenden-devcontainer"
-CONTAINER_NAME="jacobwoffenden-devcontainer"
-CONTAINER_USERNAME="jacobwoffenden"
+CONTAINER_IMAGE_NAME="devcontainer"
+CONTAINER_NAME="devcontainer"
+CONTAINER_USERNAME="devcontainer"
 
 SCRIPT_MODE="${1}"
 ####################
 # Functions
 ####################
-cleanUntaggedContainers() {
+clean_untagged_containers() {
   danglingContainerCount=$( docker images --quiet --filter "dangling=true" | wc -l | xargs )
   if [[ "${danglingContainerCount}" -gt 0 ]]; then
     echo "---> Removing untagged containers [ ${danglingContainerCount} ]"
@@ -23,15 +23,15 @@ cleanUntaggedContainers() {
   fi
 }
 
-removeContainer() {
-  getContainerId=$( docker ps --quiet --filter "name=${CONTAINER_NAME}" )
+remove_container() {
+  getContainerId=$( docker ps --all --quiet --filter "name=${CONTAINER_NAME}" )
   if [[ ! -z "${getContainerId}" ]]; then
     echo "---> Removing container [ ${CONTAINER_NAME} ]"
     docker rm --force "${CONTAINER_NAME}" &> /dev/null
   fi
 }
 
-buildContainer() {
+build_container() {
   echo "---> Building container [ ${CONTAINER_IMAGE_NAME} ]"
   dockerBuild=$( docker build \
     --quiet \
@@ -39,10 +39,10 @@ buildContainer() {
     --file devcontainer/Containerfile \
     --tag "${CONTAINER_IMAGE_NAME}" \
     . )
-  cleanUntaggedContainers
+  clean_untagged_containers
 }
 
-launchContainer() {
+launch_container() {
   echo "---> Launching container [ ${CONTAINER_NAME} ]"
   dockerLaunch=$( docker run \
     --init \
@@ -60,8 +60,12 @@ launchContainer() {
     --volume ${CONTAINER_NAME}-docker:/var/lib/docker \
     ${CONTAINER_IMAGE_NAME} )
 
-    echo "---> Closing Visual Studio Code"
-    osascript -e 'quit app "Visual Studio Code"'
+    # echo "---> Closing Visual Studio Code"
+    # osascript -e 'quit app "Visual Studio Code"'
+
+    sleep 2
+
+    install_devcontainer_manifest
 
     echo "---> Opening Visual Studio Code"
     containerHex=$( echo "{\"containerName\":\"${CONTAINER_NAME}\"}" | od -A n -t x1 | tr -d '[ \n\t ]' | xargs )
@@ -69,10 +73,10 @@ launchContainer() {
 
 }
 
-devcontainerManifest() {
+install_devcontainer_manifest() {
   echo "---> Creating devcontainer manifest"
   mkdir -p "/Users/${USER}/Library/Application Support/Code/User/globalStorage/ms-vscode-remote.remote-containers/imageConfigs"
-  cp vscode/${CONTAINER_NAME}.json.tpl "/Users/${USER}/Library/Application Support/Code/User/globalStorage/ms-vscode-remote.remote-containers/imageConfigs/${CONTAINER_NAME}.json"
+  cp vscode/${CONTAINER_NAME}.json "/Users/${USER}/Library/Application Support/Code/User/globalStorage/ms-vscode-remote.remote-containers/imageConfigs/${CONTAINER_NAME}.json"
   sed -i '' "s|CONTAINER_USERNAME|${CONTAINER_USERNAME}|" "/Users/${USER}/Library/Application Support/Code/User/globalStorage/ms-vscode-remote.remote-containers/imageConfigs/${CONTAINER_NAME}.json"
 }
 
@@ -86,14 +90,13 @@ fi
 
 case ${SCRIPT_MODE} in
   install | update )
-    removeContainer
-    buildContainer
-    devcontainerManifest
-    launchContainer
+    # remove_container
+    build_container
+    launch_container
   ;;
   launch )
-    removeContainer
-    launchContainer
+    remove_container
+    launch_container
   ;;
   * )
     echo "not supported"
