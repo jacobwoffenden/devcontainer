@@ -39,12 +39,3 @@ jobs:
             devcontainer:latest
           build-args: |
             CONTAINER_USERNAME=devcontainer
-
-      - name: Scan Container
-        id: scan
-        uses: anchore/scan-action@v3
-        with:
-          image: devcontainer:latest
-          fail-build: true
-          severity-cutoff: critical
-
