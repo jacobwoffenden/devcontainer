@@ -254,11 +254,17 @@ install_tfsec() {
 }
 
 install_trivy() {
-  curl --location https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-${ALT_ARCH^^}.tar.gz \
-    --output trivy_${TRIVY_VERSION}_Linux-${ALT_ARCH^^}.tar.gz
-  tar -zxvf trivy_${TRIVY_VERSION}_Linux-${ALT_ARCH^^}.tar.gz
+  if [[ "${ALT_ARCH}" == "amd64" ]]; then
+    TRIVY_ARCHIVE="trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
+  elif [[ "${ALT_ARCH}" == "arm64" ]]; then
+    TRIVY_ARCHIVE="trivy_${TRIVY_VERSION}_Linux-ARM64.tar.gz"
+  fi
+
+  curl --location https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/${TRIVY_ARCHIVE} \
+    --output ${TRIVY_ARCHIVE}
+  tar -zxvf ${TRIVY_ARCHIVE}
   mv trivy /usr/local/bin/trivy
-  rm -rf trivy_${TRIVY_VERSION}_Linux-${ALT_ARCH^^}.tar.gz README.md LICENSE contrib
+  rm -rf ${TRIVY_ARCHIVE} README.md LICENSE contrib
 }
 
 configure_user_artefacts() {
