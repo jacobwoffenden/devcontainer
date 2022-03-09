@@ -43,6 +43,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/jacobwoffenden/devcontainer:${{ steps.prepare_build_args.outputs.build_version }}
+            ghcr.io/jacobwoffenden/devcontainer:latest
           build-args: |
             CONTAINER_USERNAME=devcontainer
