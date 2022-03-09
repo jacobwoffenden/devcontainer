@@ -1,0 +1,13 @@
+{
+  "workspaceFolder": "/home/CONTAINER_USERNAME/workspace",
+  "extensions": [
+    "EditorConfig.EditorConfig",
+    "ms-azuretools.vscode-docker",
+    "ms-python.python",
+    "redhat.vscode-yaml",
+    "redhat.ansible",
+    "HashiCorp.terraform",
+    "AquaSecurityOfficial.trivy-vulnerability-scanner",
+    "snyk-security.snyk-vulnerability-scanner"
+  ]
+}

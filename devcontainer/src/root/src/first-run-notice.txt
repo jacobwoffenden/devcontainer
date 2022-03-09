@@ -1,0 +1,5 @@
+👋 Welcome!
+
+🆘 If you need help or assistance, please raise an issue on https://github.com/jacobwoffenden/devcontainer/issues
+
+🔍 To explore VS Code to its fullest, search using the Command Palette (Cmd/Ctrl + Shift + P or F1)

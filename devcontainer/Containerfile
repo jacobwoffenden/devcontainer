@@ -1,0 +1,23 @@
+FROM public.ecr.aws/ubuntu/ubuntu:20.04_stable
+
+ARG CONTAINER_USERNAME
+
+COPY devcontainer/src/root /root/
+
+RUN bash /root/build.sh
+
+USER ${CONTAINER_USERNAME}
+
+VOLUME [ "/home/${CONTAINER_USERNAME}/workspace" ]
+VOLUME [ "/home/${CONTAINER_USERNAME}/.commandhistory" ]
+VOLUME [ "/home/${CONTAINER_USERNAME}/.docker" ]
+VOLUME [ "/home/${CONTAINER_USERNAME}/.config/gh" ]
+VOLUME [ "/home/${CONTAINER_USERNAME}/.aws" ]
+VOLUME [ "/home/${CONTAINER_USERNAME}/.awsvault" ]
+VOLUME [ "/home/${CONTAINER_USERNAME}/.kube" ]
+VOLUME [ "/home/${CONTAINER_USERNAME}/.config/gcloud" ]
+VOLUME [ "/home/${CONTAINER_USERNAME}/.config/configstore" ]
+VOLUME [ "/var/lib/docker" ]
+
+ENTRYPOINT [ "/usr/local/share/docker-init.sh", "/usr/local/share/ssh-init.sh" ]
+CMD [ "/usr/bin/sleep", "infinity" ]
