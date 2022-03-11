@@ -14,32 +14,32 @@ USERNAME="${CONTAINER_USERNAME}"
 USER_UID="1000"
 USER_GID="1000"
 
-VSCODE_DEVCONTAINERS_VERSION="v0.222.0" # https://github.com/microsoft/vscode-dev-containers/releases
+VSCODE_DEVCONTAINERS_VERSION="0.226.0" # https://github.com/microsoft/vscode-dev-containers/releases
 
 # Binaries
-AWSCLI_VERSION="2.4.19" # https://github.com/aws/aws-cli/blob/v2/CHANGELOG.rst
-AWSVAULT_VERSION="6.5.0" # https://github.com/99designs/aws-vault/releases
-COSIGN_VERSION="1.5.2" # https://github.com/sigstore/cosign/releases
-GITHUB_CLI_VERSION="2.5.1" # https://github.com/cli/cli/releases
-GCLOUD_VERSION="373.0.0" # https://cloud.google.com/sdk/docs/release-notes
-GRYPE_VERSION="0.33.0" # https://github.com/anchore/grype/releases
-HELM_VERSION="3.8.0" # https://github.com/helm/helm/releases
+AWSCLI_VERSION="2.4.25" # https://github.com/aws/aws-cli/blob/v2/CHANGELOG.rst
+AWSVAULT_VERSION="6.6.0" # https://github.com/99designs/aws-vault/releases
+COSIGN_VERSION="1.6.0" # https://github.com/sigstore/cosign/releases
+GITHUB_CLI_VERSION="2.5.2" # https://github.com/cli/cli/releases
+GCLOUD_VERSION="376.0.0" # https://cloud.google.com/sdk/docs/release-notes
+GRYPE_VERSION="0.33.1" # https://github.com/anchore/grype/releases
+HELM_VERSION="3.8.1" # https://github.com/helm/helm/releases
 KUBECTL_VERSION="1.23.4" # https://storage.googleapis.com/kubernetes-release/release/stable.txt
 KUBELINTER_VERSION="0.2.5" # https://github.com/stackrox/kube-linter/releases
 KUBESEC_VERSION="2.11.4" # https://github.com/controlplaneio/kubesec/releases
-OPA_VERSION="0.37.2" # https://github.com/open-policy-agent/opa/releases
+OPA_VERSION="0.38.0" # https://github.com/open-policy-agent/opa/releases
 ORAS_VERSION="0.12.0" # https://github.com/oras-project/oras/releases
-SNYK_VERSION="1.856.0" # https://github.com/snyk/snyk/releases
-SYFT_VERSION="0.38.0" # https://github.com/anchore/syft/releases
-TERRAFORM_VERSION="1.1.6" # https://github.com/hashicorp/terraform/releases
-TERRAGRUNT_VERSION="0.36.1" # https://github.com/gruntwork-io/terragrunt/releases
+SNYK_VERSION="1.868.0" # https://github.com/snyk/snyk/releases
+SYFT_VERSION="0.41.1" # https://github.com/anchore/syft/releases
+TERRAFORM_VERSION="1.1.7" # https://github.com/hashicorp/terraform/releases
+TERRAGRUNT_VERSION="0.36.3" # https://github.com/gruntwork-io/terragrunt/releases
 TFLINT_VERSION="0.34.1" # https://github.com/terraform-linters/tflint/releases
-TFSEC_VERSION="1.4.2" # https://github.com/aquasecurity/tfsec/releases
-TRIVY_VERSION="0.23.0" # https://github.com/aquasecurity/trivy/releases
+TFSEC_VERSION="1.8.0" # https://github.com/aquasecurity/tfsec/releases
+TRIVY_VERSION="0.24.2" # https://github.com/aquasecurity/trivy/releases
 
 # Pip
 ARGCOMPLETE_VERSION="2.0.0" # https://pypi.org/project/argcomplete/#history
-ANSIBLE_VERSION="5.3.0" # https://pypi.org/project/ansible/#history
+ANSIBLE_VERSION="5.4.0" # https://pypi.org/project/ansible/#history
 ANSIBLE_LINT_VERSION="5.4.0" # https://pypi.org/project/ansible-lint/#history
 
 ####################
@@ -89,7 +89,7 @@ install_pip_packages() {
 }
 
 setup_vscode_common() {
-  curl https://raw.githubusercontent.com/microsoft/vscode-dev-containers/${VSCODE_DEVCONTAINERS_VERSION}/script-library/common-debian.sh \
+  curl https://raw.githubusercontent.com/microsoft/vscode-dev-containers/v${VSCODE_DEVCONTAINERS_VERSION}/script-library/common-debian.sh \
     --output /tmp/common-debian.sh
   bash /tmp/common-debian.sh "true" "${USERNAME}" "${USER_UID}" "${USER_GID}" "true" "true" "false"
   chsh --shell /bin/zsh "${USERNAME}"
@@ -103,14 +103,14 @@ setup_vscode_docker() {
   groupadd --gid 800 docker
   usermod --append --groups docker ${USERNAME}
 
-  curl https://raw.githubusercontent.com/microsoft/vscode-dev-containers/${VSCODE_DEVCONTAINERS_VERSION}/script-library/docker-in-docker-debian.sh \
+  curl https://raw.githubusercontent.com/microsoft/vscode-dev-containers/v${VSCODE_DEVCONTAINERS_VERSION}/script-library/docker-in-docker-debian.sh \
     --output /tmp/docker-in-docker-debian.sh
   bash /tmp/docker-in-docker-debian.sh "true" "${USERNAME}" "true" "latest"
   rm --force /tmp/docker-in-docker-debian.sh
 }
 
 setup_vscode_ssh() {
-  curl https://raw.githubusercontent.com/microsoft/vscode-dev-containers/${VSCODE_DEVCONTAINERS_VERSION}/script-library/sshd-debian.sh \
+  curl https://raw.githubusercontent.com/microsoft/vscode-dev-containers/v${VSCODE_DEVCONTAINERS_VERSION}/script-library/sshd-debian.sh \
     --output /tmp/sshd-debian.sh
   bash /tmp/sshd-debian.sh "2222" "${USERNAME}" "false" "skip" "true"
 }
