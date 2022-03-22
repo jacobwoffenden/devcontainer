@@ -66,16 +66,13 @@ launch_container() {
     --volume ${CONTAINER_NAME}-docker:/var/lib/docker \
     ${CONTAINER_IMAGE_NAME} )
 
-    # echo "---> Closing Visual Studio Code"
-    # osascript -e 'quit app "Visual Studio Code"'
+  sleep 2
 
-    sleep 2
+  install_devcontainer_manifest
 
-    install_devcontainer_manifest
-
-    echo "---> Opening Visual Studio Code"
-    containerHex=$( echo "{\"containerName\":\"${CONTAINER_NAME}\"}" | od -A n -t x1 | tr -d '[ \n\t ]' | xargs )
-    code --folder-uri=vscode-remote://attached-container+${containerHex}/home/${CONTAINER_USERNAME}/workspace
+  echo "---> Opening Visual Studio Code"
+  containerHex=$( echo "{\"containerName\":\"${CONTAINER_NAME}\"}" | od -A n -t x1 | tr -d '[ \n\t ]' | xargs )
+  code --folder-uri=vscode-remote://attached-container+${containerHex}/home/${CONTAINER_USERNAME}/workspace
 
 }
 
@@ -100,7 +97,7 @@ case ${SCRIPT_MODE} in
     build_container
     launch_container
   ;;
-  launch )
+  launch | restart )
     remove_container
     launch_container
   ;;
