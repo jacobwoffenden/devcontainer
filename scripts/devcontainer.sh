@@ -12,6 +12,7 @@ CONTAINER_NAME="devcontainer"
 CONTAINER_USERNAME="devcontainer"
 
 SCRIPT_MODE="${1}"
+BUILD_DEBUG="${BUILD_DEBUG:-0}"
 ####################
 # Functions
 ####################
@@ -33,12 +34,20 @@ remove_container() {
 
 build_container() {
   echo "---> Building container [ ${CONTAINER_IMAGE_NAME} ]"
-  dockerBuild=$( docker build \
-    --quiet \
+
+  if [[ "${BUILD_DEBUG}" -eq 1 ]]; then
+    buildMode=""
+  else
+    buildMode="--quiet"
+  fi
+
+  dockerBuild=$( docker build ${buildMode} \
     --build-arg CONTAINER_USERNAME="${CONTAINER_USERNAME}" \
     --file devcontainer/Containerfile \
     --tag "${CONTAINER_IMAGE_NAME}" \
-    . )
+    . 
+  )
+
   clean_untagged_containers
 }
 
@@ -64,7 +73,8 @@ launch_container() {
     --volume ${CONTAINER_NAME}-gcloud:/home/${CONTAINER_USERNAME}/.config/gcloud \
     --volume ${CONTAINER_NAME}-configstore:/home/${CONTAINER_USERNAME}/.config/configstore \
     --volume ${CONTAINER_NAME}-docker:/var/lib/docker \
-    ${CONTAINER_IMAGE_NAME} )
+    ${CONTAINER_IMAGE_NAME} 
+  )
 
   sleep 2
 

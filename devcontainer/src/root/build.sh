@@ -14,34 +14,35 @@ USERNAME="${CONTAINER_USERNAME}"
 USER_UID="1000"
 USER_GID="1000"
 
-VSCODE_DEVCONTAINERS_VERSION="0.228.0" # https://github.com/microsoft/vscode-dev-containers/releases
+# Common
+VSCODE_DEVCONTAINERS_VERSION="0.231.3" # https://github.com/microsoft/vscode-dev-containers/releases
 
 # Binaries
-AWSCLI_VERSION="2.4.27" # https://github.com/aws/aws-cli/blob/v2/CHANGELOG.rst
+AWSCLI_VERSION="2.5.2" # https://github.com/aws/aws-cli/blob/v2/CHANGELOG.rst
 AWSVAULT_VERSION="6.6.0" # https://github.com/99designs/aws-vault/releases
 CFNLINT_VERSION="0.58.4" # https://pypi.org/project/cfn-lint/#history
 COSIGN_VERSION="1.6.0" # https://github.com/sigstore/cosign/releases
-GITHUB_CLI_VERSION="2.6.0" # https://github.com/cli/cli/releases
-GCLOUD_VERSION="377.0.0" # https://cloud.google.com/sdk/docs/release-notes
-GRYPE_VERSION="0.34.4" # https://github.com/anchore/grype/releases
+GITHUB_CLI_VERSION="2.7.0" # https://github.com/cli/cli/releases
+GCLOUD_VERSION="379.0.0" # https://cloud.google.com/sdk/docs/release-notes
+GRYPE_VERSION="0.34.7" # https://github.com/anchore/grype/releases
 HELM_VERSION="3.8.1" # https://github.com/helm/helm/releases
 KUBECTL_VERSION="1.23.5" # https://storage.googleapis.com/kubernetes-release/release/stable.txt
-KUBELINTER_VERSION="0.2.5" # https://github.com/stackrox/kube-linter/releases
+KUBELINTER_VERSION="0.2.6" # https://github.com/stackrox/kube-linter/releases
 KUBESEC_VERSION="2.11.4" # https://github.com/controlplaneio/kubesec/releases
-OPA_VERSION="0.38.1" # https://github.com/open-policy-agent/opa/releases
+OPA_VERSION="0.39.0" # https://github.com/open-policy-agent/opa/releases
 ORAS_VERSION="0.12.0" # https://github.com/oras-project/oras/releases
-SNYK_VERSION="1.888.0" # https://github.com/snyk/snyk/releases
-SYFT_VERSION="0.42.1" # https://github.com/anchore/syft/releases
+SNYK_VERSION="1.894.0" # https://github.com/snyk/snyk/releases
+SYFT_VERSION="0.43.0" # https://github.com/anchore/syft/releases
 TERRAFORM_VERSION="1.1.7" # https://github.com/hashicorp/terraform/releases
 TERRAGRUNT_VERSION="0.36.6" # https://github.com/gruntwork-io/terragrunt/releases
-TFLINT_VERSION="0.34.1" # https://github.com/terraform-linters/tflint/releases
-TFSEC_VERSION="1.13.0" # https://github.com/aquasecurity/tfsec/releases
-TRIVY_VERSION="0.24.4" # https://github.com/aquasecurity/trivy/releases
+TFLINT_VERSION="0.35.0" # https://github.com/terraform-linters/tflint/releases
+TFSEC_VERSION="1.15.4" # https://github.com/aquasecurity/tfsec/releases
+TRIVY_VERSION="0.25.0" # https://github.com/aquasecurity/trivy/releases
 
 # Pip
 ARGCOMPLETE_VERSION="2.0.0" # https://pypi.org/project/argcomplete/#history
 ANSIBLE_VERSION="5.5.0" # https://pypi.org/project/ansible/#history
-ANSIBLE_LINT_VERSION="6.0.1" # https://pypi.org/project/ansible-lint/#history
+ANSIBLE_LINT_VERSION="6.0.2" # https://pypi.org/project/ansible-lint/#history
 
 ####################
 # Functions
@@ -152,7 +153,7 @@ install_gcloud() {
   curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
   apt update --yes
   apt install --yes \
-    google-cloud-sdk="${GCLOUD_VERSION}-0" # '-0' is required as per https://cloud.google.com/sdk/docs/install#:~:text=To%20revert%20to,cloud%2Dsdk%3D123.0.0%2D0
+    google-cloud-cli="${GCLOUD_VERSION}-0" # '-0' is required as per https://cloud.google.com/sdk/docs/install#:~:text=To%20revert%20to,cloud%2Dsdk%3D123.0.0%2D0
 }
 
 install_grype() {
