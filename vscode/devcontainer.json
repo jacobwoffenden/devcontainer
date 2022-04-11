@@ -7,8 +7,5 @@
     "redhat.vscode-yaml",
     "redhat.ansible",
     "HashiCorp.terraform"
-  ],
-  "files.associations": {
-    "*.hcl": "terraform"
-  }
+  ]
 }
