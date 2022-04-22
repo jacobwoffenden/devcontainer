@@ -15,29 +15,29 @@ USER_UID="1000"
 USER_GID="1000"
 
 # Common
-VSCODE_DEVCONTAINERS_VERSION="0.231.5" # https://github.com/microsoft/vscode-dev-containers/releases
+VSCODE_DEVCONTAINERS_VERSION="main" # https://github.com/microsoft/vscode-dev-containers/releases
 
 # Binaries
-AWSCLI_VERSION="2.5.4" # https://github.com/aws/aws-cli/blob/v2/CHANGELOG.rst
+AWSCLI_VERSION="2.5.8" # https://github.com/aws/aws-cli/blob/v2/CHANGELOG.rst
 AWSVAULT_VERSION="6.6.0" # https://github.com/99designs/aws-vault/releases
-CFNLINT_VERSION="0.58.4" # https://pypi.org/project/cfn-lint/#history
-COSIGN_VERSION="1.7.1" # https://github.com/sigstore/cosign/releases
-GITHUB_CLI_VERSION="2.7.0" # https://github.com/cli/cli/releases
-GCLOUD_VERSION="380.0.0" # https://cloud.google.com/sdk/docs/release-notes
-GRYPE_VERSION="0.34.7" # https://github.com/anchore/grype/releases
-HELM_VERSION="3.8.1" # https://github.com/helm/helm/releases
-KUBECTL_VERSION="1.23.5" # https://storage.googleapis.com/kubernetes-release/release/stable.txt
+CFNLINT_VERSION="0.59.0" # https://pypi.org/project/cfn-lint/#history
+COSIGN_VERSION="v1.7.2" # https://github.com/sigstore/cosign/releases
+GITHUB_CLI_VERSION="v2.8.0" # https://github.com/cli/cli/releases
+GCLOUD_VERSION="382.0.0" # https://cloud.google.com/sdk/docs/release-notes
+GRYPE_VERSION="v0.35.0" # https://github.com/anchore/grype/releases
+HELM_VERSION="v3.8.2" # https://github.com/helm/helm/releases
+KUBECTL_VERSION="v1.23.6" # https://storage.googleapis.com/kubernetes-release/release/stable.txt
 KUBELINTER_VERSION="0.2.6" # https://github.com/stackrox/kube-linter/releases
-KUBESEC_VERSION="2.11.4" # https://github.com/controlplaneio/kubesec/releases
-OPA_VERSION="0.39.0" # https://github.com/open-policy-agent/opa/releases
+KUBESEC_VERSION="v2.11.4" # https://github.com/controlplaneio/kubesec/releases
+OPA_VERSION="v0.39.0" # https://github.com/open-policy-agent/opa/releases
 ORAS_VERSION="0.12.0" # https://github.com/oras-project/oras/releases
-SNYK_VERSION="1.902.0" # https://github.com/snyk/snyk/releases
-SYFT_VERSION="0.43.2" # https://github.com/anchore/syft/releases
-TERRAFORM_VERSION="1.1.8" # https://github.com/hashicorp/terraform/releases
-TERRAGRUNT_VERSION="0.36.6" # https://github.com/gruntwork-io/terragrunt/releases
+SNYK_VERSION="v1.910.0" # https://github.com/snyk/snyk/releases
+SYFT_VERSION="v0.44.1" # https://github.com/anchore/syft/releases
+TERRAFORM_VERSION="1.1.9" # https://github.com/hashicorp/terraform/releases
+TERRAGRUNT_VERSION="v0.36.7" # https://github.com/gruntwork-io/terragrunt/releases
 TFLINT_VERSION="0.35.0" # https://github.com/terraform-linters/tflint/releases
-TFSEC_VERSION="1.18.0" # https://github.com/aquasecurity/tfsec/releases
-TRIVY_VERSION="0.25.4" # https://github.com/aquasecurity/trivy/releases
+TFSEC_VERSION="v1.18.0" # https://github.com/aquasecurity/tfsec/releases
+TRIVY_VERSION="v0.26.0" # https://github.com/aquasecurity/trivy/releases
 
 # Pip
 ARGCOMPLETE_VERSION="2.0.0" # https://pypi.org/project/argcomplete/#history
@@ -92,7 +92,7 @@ install_pip_packages() {
 }
 
 setup_vscode_common() {
-  curl https://raw.githubusercontent.com/microsoft/vscode-dev-containers/v${VSCODE_DEVCONTAINERS_VERSION}/script-library/common-debian.sh \
+  curl https://raw.githubusercontent.com/microsoft/vscode-dev-containers/${VSCODE_DEVCONTAINERS_VERSION}/script-library/common-debian.sh \
     --output /tmp/common-debian.sh
   bash /tmp/common-debian.sh "true" "${USERNAME}" "${USER_UID}" "${USER_GID}" "true" "true" "false"
   chsh --shell /bin/zsh "${USERNAME}"
@@ -106,16 +106,20 @@ setup_vscode_docker() {
   groupadd --gid 800 docker
   usermod --append --groups docker ${USERNAME}
 
-  curl https://raw.githubusercontent.com/microsoft/vscode-dev-containers/v${VSCODE_DEVCONTAINERS_VERSION}/script-library/docker-in-docker-debian.sh \
+  curl https://raw.githubusercontent.com/microsoft/vscode-dev-containers/${VSCODE_DEVCONTAINERS_VERSION}/script-library/docker-in-docker-debian.sh \
     --output /tmp/docker-in-docker-debian.sh
   bash /tmp/docker-in-docker-debian.sh "true" "${USERNAME}" "true" "latest"
   rm --force /tmp/docker-in-docker-debian.sh
 }
 
 setup_vscode_ssh() {
-  curl https://raw.githubusercontent.com/microsoft/vscode-dev-containers/v${VSCODE_DEVCONTAINERS_VERSION}/script-library/sshd-debian.sh \
+  groupadd --gid 900 ssh
+  usermod --append --groups ssh ${USERNAME}
+
+  curl https://raw.githubusercontent.com/microsoft/vscode-dev-containers/${VSCODE_DEVCONTAINERS_VERSION}/script-library/sshd-debian.sh \
     --output /tmp/sshd-debian.sh
   bash /tmp/sshd-debian.sh "2222" "${USERNAME}" "false" "skip" "true"
+  rm --force /tmp/sshd-debian.sh
 }
 
 install_awscli() {
@@ -133,17 +137,18 @@ install_awsvault() {
 }
 
 install_cosign() {
-  curl --location https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-${ALT_ARCH} \
+  curl --location https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-${ALT_ARCH} \
     --output /usr/local/bin/cosign
   chmod +x /usr/local/bin/cosign
 }
 
 install_github() {
-  curl --location https://github.com/cli/cli/releases/download/v${GITHUB_CLI_VERSION}/gh_${GITHUB_CLI_VERSION}_linux_${ALT_ARCH}.tar.gz \
-    --output gh_${GITHUB_CLI_VERSION}_linux_${ALT_ARCH}.tar.gz
-  tar -zxvf gh_${GITHUB_CLI_VERSION}_linux_${ALT_ARCH}.tar.gz
-  mv gh_${GITHUB_CLI_VERSION}_linux_${ALT_ARCH}/bin/gh /usr/local/bin/gh
-  rm -rf gh_${GITHUB_CLI_VERSION}_linux_${ALT_ARCH}*
+  githubCliPkgVersion=$( echo ${GITHUB_CLI_VERSION} | sed 's|v||' )
+  curl --location https://github.com/cli/cli/releases/download/${GITHUB_CLI_VERSION}/gh_${githubCliPkgVersion}_linux_${ALT_ARCH}.tar.gz \
+    --output gh_${githubCliPkgVersion}_linux_${ALT_ARCH}.tar.gz
+  tar -zxvf gh_${githubCliPkgVersion}_linux_${ALT_ARCH}.tar.gz
+  mv gh_${githubCliPkgVersion}_linux_${ALT_ARCH}/bin/gh /usr/local/bin/gh
+  rm -rf gh_${githubCliPkgVersion}_linux_${ALT_ARCH}*
 
   gh completion -s zsh > /usr/local/share/zsh/site-functions/_gh
 }
@@ -157,23 +162,24 @@ install_gcloud() {
 }
 
 install_grype() {
-  curl --location https://github.com/anchore/grype/releases/download/v${GRYPE_VERSION}/grype_${GRYPE_VERSION}_linux_${ALT_ARCH}.tar.gz \
-    --output grype_${GRYPE_VERSION}_linux_${ALT_ARCH}.tar.gz
-  tar -zxvf grype_${GRYPE_VERSION}_linux_${ALT_ARCH}.tar.gz
+  grypePkgVersion=$( echo ${GRYPE_VERSION} | sed 's|v||' )
+  curl --location https://github.com/anchore/grype/releases/download/${GRYPE_VERSION}/grype_${grypePkgVersion}_linux_${ALT_ARCH}.tar.gz \
+    --output grype_${grypePkgVersion}_linux_${ALT_ARCH}.tar.gz
+  tar -zxvf grype_${grypePkgVersion}_linux_${ALT_ARCH}.tar.gz
   mv grype /usr/local/bin/grype
-  rm grype_${GRYPE_VERSION}_linux_${ALT_ARCH}.tar.gz README.md CHANGELOG.md LICENSE
+  rm grype_${grypePkgVersion}_linux_${ALT_ARCH}.tar.gz README.md CHANGELOG.md LICENSE
 }
 
 install_helm() {
-  curl --location https://get.helm.sh/helm-v${HELM_VERSION}-linux-${ALT_ARCH}.tar.gz \
-    --output helm-v${HELM_VERSION}-linux-${ALT_ARCH}.tar.gz
-  tar -zxvf helm-v${HELM_VERSION}-linux-${ALT_ARCH}.tar.gz
+  curl --location https://get.helm.sh/helm-${HELM_VERSION}-linux-${ALT_ARCH}.tar.gz \
+    --output helm-${HELM_VERSION}-linux-${ALT_ARCH}.tar.gz
+  tar -zxvf helm-${HELM_VERSION}-linux-${ALT_ARCH}.tar.gz
   mv linux-${ALT_ARCH}/helm /usr/local/bin/helm
-  rm -rf linux-${ALT_ARCH} helm-v${HELM_VERSION}-linux-${ALT_ARCH}.tar.gz
+  rm -rf linux-${ALT_ARCH} helm-${HELM_VERSION}-linux-${ALT_ARCH}.tar.gz
 }
 
 install_kubectl() {
-  curl --location https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/${ALT_ARCH}/kubectl \
+  curl --location https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${ALT_ARCH}/kubectl \
     --output /usr/local/bin/kubectl
   chmod +x /usr/local/bin/kubectl
 }
@@ -187,7 +193,7 @@ install_kubelinter() {
 }
 
 install_kubesec() {
-  curl --location https://github.com/controlplaneio/kubesec/releases/download/v${KUBESEC_VERSION}/kubesec_linux_${ALT_ARCH}.tar.gz \
+  curl --location https://github.com/controlplaneio/kubesec/releases/download/${KUBESEC_VERSION}/kubesec_linux_${ALT_ARCH}.tar.gz \
     --output kubesec_linux_${ALT_ARCH}.tar.gz
   tar -zxvf kubesec_linux_${ALT_ARCH}.tar.gz
   mv kubesec /usr/local/bin/kubesec
@@ -201,7 +207,7 @@ install_opa() {
     OPA_BINARY="opa_linux_arm64_static"
   fi
 
-  curl --location https://github.com/open-policy-agent/opa/releases/download/v${OPA_VERSION}/${OPA_BINARY} \
+  curl --location https://github.com/open-policy-agent/opa/releases/download/${OPA_VERSION}/${OPA_BINARY} \
     --output /usr/local/bin/opa
   chmod +x /usr/local/bin/opa
 }
@@ -215,17 +221,18 @@ install_oras() {
 }
 
 install_snyk() {
-  curl --location https://github.com/snyk/snyk/releases/download/v${SNYK_VERSION}/snyk-linux-${ALT_ARCH} \
+  curl --location https://github.com/snyk/snyk/releases/download/${SNYK_VERSION}/snyk-linux-${ALT_ARCH} \
     --output /usr/local/bin/snyk
   chmod +x /usr/local/bin/snyk
 }
 
 install_syft() {
-  curl --location https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syft_${SYFT_VERSION}_linux_${ALT_ARCH}.tar.gz \
-    --output syft_${SYFT_VERSION}_linux_${ALT_ARCH}.tar.gz
-  tar -zxvf syft_${SYFT_VERSION}_linux_${ALT_ARCH}.tar.gz
+  syftPkgVersion=$( echo ${SYFT_VERSION} | sed 's|v||' )
+  curl --location https://github.com/anchore/syft/releases/download/${SYFT_VERSION}/syft_${syftPkgVersion}_linux_${ALT_ARCH}.tar.gz \
+    --output syft_${syftPkgVersion}_linux_${ALT_ARCH}.tar.gz
+  tar -zxvf syft_${syftPkgVersion}_linux_${ALT_ARCH}.tar.gz
   mv syft /usr/local/bin/syft
-  rm syft_${SYFT_VERSION}_linux_${ALT_ARCH}.tar.gz README.md CHANGELOG.md LICENSE
+  rm syft_${syftPkgVersion}_linux_${ALT_ARCH}.tar.gz README.md CHANGELOG.md LICENSE
 }
 
 install_terraform() {
@@ -237,7 +244,7 @@ install_terraform() {
 }
 
 install_terragrunt() {
-  curl --location https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_${ALT_ARCH} \
+  curl --location https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_${ALT_ARCH} \
     --output /usr/local/bin/terragrunt
   chmod +x /usr/local/bin/terragrunt
 }
@@ -251,19 +258,21 @@ install_tflint() {
 }
 
 install_tfsec() {
-  curl --location https://github.com/aquasecurity/tfsec/releases/download/v${TFSEC_VERSION}/tfsec-linux-${ALT_ARCH} \
+  curl --location https://github.com/aquasecurity/tfsec/releases/download/${TFSEC_VERSION}/tfsec-linux-${ALT_ARCH} \
     --output /usr/local/bin/tfsec
   chmod +x /usr/local/bin/tfsec
 }
 
 install_trivy() {
+  trivyPkgVersion=$( echo ${TRIVY_VERSION} | sed 's|v||' )
+
   if [[ "${ALT_ARCH}" == "amd64" ]]; then
-    TRIVY_ARCHIVE="trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
+    TRIVY_ARCHIVE="trivy_${trivyPkgVersion}_Linux-64bit.tar.gz"
   elif [[ "${ALT_ARCH}" == "arm64" ]]; then
-    TRIVY_ARCHIVE="trivy_${TRIVY_VERSION}_Linux-ARM64.tar.gz"
+    TRIVY_ARCHIVE="trivy_${trivyPkgVersion}_Linux-ARM64.tar.gz"
   fi
 
-  curl --location https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/${TRIVY_ARCHIVE} \
+  curl --location https://github.com/aquasecurity/trivy/releases/download/${TRIVY_VERSION}/${TRIVY_ARCHIVE} \
     --output ${TRIVY_ARCHIVE}
   tar -zxvf ${TRIVY_ARCHIVE}
   mv trivy /usr/local/bin/trivy
