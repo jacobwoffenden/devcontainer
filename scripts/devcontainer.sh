@@ -7,12 +7,13 @@ set -o pipefail
 ####################
 # Variables
 ####################
+BUILD_DEBUG="${BUILD_DEBUG:-0}"
+SCRIPT_MODE="${1}"
+
 CONTAINER_IMAGE_NAME="devcontainer"
 CONTAINER_NAME="devcontainer"
 CONTAINER_USERNAME="devcontainer"
 
-SCRIPT_MODE="${1}"
-BUILD_DEBUG="${BUILD_DEBUG:-0}"
 ####################
 # Functions
 ####################

@@ -15,33 +15,33 @@ USER_UID="1000"
 USER_GID="1000"
 
 # Common
-VSCODE_DEVCONTAINERS_VERSION="main" # https://github.com/microsoft/vscode-dev-containers/releases
+VSCODE_DEVCONTAINERS_VERSION="v0.233.0" # https://github.com/microsoft/vscode-dev-containers/releases
 
 # Binaries
-AWSCLI_VERSION="2.5.8" # https://github.com/aws/aws-cli/blob/v2/CHANGELOG.rst
+AWSCLI_VERSION="2.6.0" # https://github.com/aws/aws-cli/blob/v2/CHANGELOG.rst
 AWSVAULT_VERSION="6.6.0" # https://github.com/99designs/aws-vault/releases
 CFNLINT_VERSION="0.59.0" # https://pypi.org/project/cfn-lint/#history
-COSIGN_VERSION="v1.7.2" # https://github.com/sigstore/cosign/releases
-GITHUB_CLI_VERSION="v2.8.0" # https://github.com/cli/cli/releases
-GCLOUD_VERSION="382.0.0" # https://cloud.google.com/sdk/docs/release-notes
+COSIGN_VERSION="v1.8.0" # https://github.com/sigstore/cosign/releases
+GITHUB_CLI_VERSION="v2.9.0" # https://github.com/cli/cli/releases
+GCLOUD_VERSION="383.0.1" # https://cloud.google.com/sdk/docs/release-notes
 GRYPE_VERSION="v0.35.0" # https://github.com/anchore/grype/releases
 HELM_VERSION="v3.8.2" # https://github.com/helm/helm/releases
 KUBECTL_VERSION="v1.23.6" # https://storage.googleapis.com/kubernetes-release/release/stable.txt
 KUBELINTER_VERSION="0.2.6" # https://github.com/stackrox/kube-linter/releases
 KUBESEC_VERSION="v2.11.4" # https://github.com/controlplaneio/kubesec/releases
-OPA_VERSION="v0.39.0" # https://github.com/open-policy-agent/opa/releases
+OPA_VERSION="v0.40.0" # https://github.com/open-policy-agent/opa/releases
 ORAS_VERSION="0.12.0" # https://github.com/oras-project/oras/releases
-SNYK_VERSION="v1.910.0" # https://github.com/snyk/snyk/releases
+SNYK_VERSION="v1.914.0" # https://github.com/snyk/snyk/releases
 SYFT_VERSION="v0.44.1" # https://github.com/anchore/syft/releases
 TERRAFORM_VERSION="1.1.9" # https://github.com/hashicorp/terraform/releases
-TERRAGRUNT_VERSION="v0.36.7" # https://github.com/gruntwork-io/terragrunt/releases
+TERRAGRUNT_VERSION="v0.36.8" # https://github.com/gruntwork-io/terragrunt/releases
 TFLINT_VERSION="0.35.0" # https://github.com/terraform-linters/tflint/releases
-TFSEC_VERSION="v1.18.0" # https://github.com/aquasecurity/tfsec/releases
-TRIVY_VERSION="v0.26.0" # https://github.com/aquasecurity/trivy/releases
+TFSEC_VERSION="v1.19.1" # https://github.com/aquasecurity/tfsec/releases
+TRIVY_VERSION="v0.27.1" # https://github.com/aquasecurity/trivy/releases
 
 # Pip
 ARGCOMPLETE_VERSION="2.0.0" # https://pypi.org/project/argcomplete/#history
-ANSIBLE_VERSION="5.6.0" # https://pypi.org/project/ansible/#history
+ANSIBLE_VERSION="5.7.0" # https://pypi.org/project/ansible/#history
 ANSIBLE_LINT_VERSION="6.0.2" # https://pypi.org/project/ansible-lint/#history
 
 ####################
