@@ -34,3 +34,4 @@ jobs:
         with:
           comment-summary-in-pr: true
           fail-on-severity: critical
+          fail-on-scopes: runtime, development
