@@ -1,0 +1,14 @@
+{
+  "id": "apm",
+  "version": "1.0.0",
+  "name": "Microsoft Agent Package Manager (https://github.com/microsoft/apm)",
+  "description": "An open-source, community-driven dependency manager for AI agents.",
+  "options": {
+    "apmVersion": {
+      "type": "string",
+      "description": "Version of APM to install",
+      "default": "latest",
+      "proposals": ["v0.35.0"]
+    }
+  }
+}
