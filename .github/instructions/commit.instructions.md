@@ -1,5 +1,5 @@
 ---
-description: Commit Style Instructions
+description: Commit style instructions
 ---
 
 # Commit Styling
