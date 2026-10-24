@@ -1,0 +1,22 @@
+{
+  "name": "devcontainer",
+  "version": "1.0.0",
+  "description": "Development Container Artefacts",
+  "homepage": "https://github.com/jacobwoffenden/devcontainer#readme",
+  "bugs": {
+    "url": "https://github.com/jacobwoffenden/devcontainer/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacobwoffenden/devcontainer.git"
+  },
+  "license": "MIT",
+  "author": "Jacob Woffenden <jacob@woffenden.io> (http://jacobwoffenden.com)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@devcontainers/cli": "0.89.0"
+  }
+}

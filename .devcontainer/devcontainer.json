@@ -1,6 +1,6 @@
 {
   "name": "devcontainer",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu:26.04",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu26.04",
   "features": {
     "ghcr.io/devcontainers/features/copilot-cli:1": {},
     "ghcr.io/devcontainers/features/docker-in-docker:4": {},
@@ -17,5 +17,6 @@
         "jacobwoffenden.vscode-github-status"
       ]
     }
-  }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh"
 }
