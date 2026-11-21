@@ -37,5 +37,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MULTI_STATUS: false
-          VALIDATE_BIOME_FORMAT: false
-          VALIDATE_BIOME_LINT: false
+          VALIDATE_ZIZMOR: false # Zizmor is run from .github/workflows/zizmor.yml
