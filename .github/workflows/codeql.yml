@@ -36,6 +36,9 @@ jobs:
             release-assets.githubusercontent.com:443
             uploads.github.com:443
 
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v10.4.0
+
       - name: Checkout
         id: checkout
         uses: actions/checkout@v7.0.1
