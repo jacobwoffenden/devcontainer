@@ -1,0 +1,14 @@
+{
+  "id": "prek",
+  "version": "1.0.0",
+  "name": "prek",
+  "description": "A fast Git hook manager written in Rust, designed as a drop-in alternative to pre-commit, reimagined.",
+  "options": {
+    "version": {
+      "type": "string",
+      "description": "Version to install",
+      "default": "latest",
+      "proposals": ["latest"]
+    }
+  }
+}
