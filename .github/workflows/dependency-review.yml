@@ -35,7 +35,7 @@ jobs:
 
       - name: Dependency Review
         id: dependency_review
-        uses: actions/dependency-review-action@v5.0.0
+        uses: actions/dependency-review-action@v5.0.1
         with:
           comment-summary-in-pr: true
           fail-on-severity: critical
