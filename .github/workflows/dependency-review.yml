@@ -33,6 +33,9 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v10.4.0
+
       - name: Dependency Review
         id: dependency_review
         uses: actions/dependency-review-action@v5.0.0
